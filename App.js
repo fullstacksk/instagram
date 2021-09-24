@@ -52,12 +52,34 @@ export class App extends Component {
 				</View>
 			);
 		}
+		if (!loggedIn)
+			return (
+				<Provider store={store}>
+					<NavigationContainer>
+					<Stack.Navigator
+						initialRouteName= "Login"
+						screenOptions={{
+							headerStyle: {
+								backgroundColor: '#b90e0e',
+							},
+							headerTintColor: '#fff',
+							headerTitleStyle: {
+								fontWeight: 'bold',
+							},
+						}}
+					>
+							<Stack.Screen name="Register" component={Register}  />
+							<Stack.Screen name="Login" component={Login}  />
+						</Stack.Navigator>
+					</NavigationContainer>
+				</Provider>
+	); 
 		
 		return (
 				<Provider store={store}>
 					<NavigationContainer>
 					<Stack.Navigator
-						initialRouteName={loggedIn ? "Main" : "Login"}
+						initialRouteName="Main"
 						screenOptions={{
 							headerStyle: {
 								backgroundColor: '#b90e0e',
@@ -71,11 +93,9 @@ export class App extends Component {
 						<Stack.Screen
 							name="Home"
 							component={Main}
-							options={{ headerShown: true }}
+							options={{ headerShown: false }}
 
 						/>
-							<Stack.Screen name="Register" component={Register}  />
-							<Stack.Screen name="Login" component={Login}  />
 						</Stack.Navigator>
 					</NavigationContainer>
 				</Provider>
