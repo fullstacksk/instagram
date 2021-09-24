@@ -20,6 +20,7 @@ export class Register extends Component {
 				name,
 				email
 			});
+			await this.props.navigation.navigate('Main');
 		} catch (error) {
 			console.log('Error', error);
 		}
@@ -61,8 +62,9 @@ const styles = StyleSheet.create({
 	textInput: {
 		padding: '12px',
 		marginBottom: '16px',
-		border: '2px solid blue',
-		borderRadius: '8px',
+		borderWidth: 2,
+		borderColor: 'blue',
+		borderRadius: 8,
 		width: '80%'
 	},
 	container: {
@@ -75,7 +77,7 @@ const styles = StyleSheet.create({
 	},
 	titleText: {
 		fontSize: 24,
-		fontWeight: 800,
+		fontWeight: '800',
 		marginBottom: '24px',
 		color: 'purple'
 	}

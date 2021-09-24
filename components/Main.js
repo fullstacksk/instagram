@@ -1,5 +1,4 @@
-import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import React, { useEffect } from 'react';
 import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
@@ -12,23 +11,17 @@ import Activity from './main/Activity';
 import Profile from './main/Profile';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const Tab = createBottomTabNavigator();
+const Tab = createMaterialBottomTabNavigator();
 const Main = ({ fetchUser, currentUser }) => {
 	useEffect(() => {
 		fetchUser();
 	}, []);
 	return (
-		// <NavigationContainer>
 		<Tab.Navigator
-			screenOptions={{
-				headerStyle: {
-					backgroundColor: '#b90e0e'
-				},
-				headerTintColor: '#fff',
-				headerTitleStyle: {
-					fontWeight: 'bold'
-				}
-			}}
+			labeled={false}
+			initialRouteName="Feed"
+			activeColor="#fff"
+			barStyle={{ backgroundColor: '#a00728' }}
 		>
 			<Tab.Screen
 				name="Feeds"
@@ -70,7 +63,6 @@ const Main = ({ fetchUser, currentUser }) => {
 				}}
 			/>
 		</Tab.Navigator>
-		// </NavigationContainer>
 	);
 };
 

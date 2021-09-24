@@ -60,7 +60,7 @@ export class App extends Component {
 						initialRouteName= "Login"
 						screenOptions={{
 							headerStyle: {
-								backgroundColor: '#b90e0e',
+								backgroundColor: '#a00728',
 							},
 							headerTintColor: '#fff',
 							headerTitleStyle: {
@@ -82,7 +82,7 @@ export class App extends Component {
 						initialRouteName="Main"
 						screenOptions={{
 							headerStyle: {
-								backgroundColor: '#b90e0e',
+								backgroundColor: '#a00728',
 							},
 							headerTintColor: '#fff',
 							headerTitleStyle: {
