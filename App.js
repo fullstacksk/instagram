@@ -1,15 +1,90 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { Component } from 'react';
+import 'firebase/auth';
+import firebase from 'firebase';
 import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import Main from './components/Main';
+import Register from './components/auth/Register';
+import Login from './components/auth/Login';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import rootReducer from './redux/reducers';
+import thunk from 'redux-thunk';
 
-export default function App() {
-	return (
-		<View style={styles.container}>
-			<Text>Instagram</Text>
-			<StatusBar style="auto" />
-		</View>
+const store = createStore(rootReducer, applyMiddleware(thunk));
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+	apiKey: 'AIzaSyCWYoncB1SxCSR3GT6THAkoDMGeAM2DNJQ',
+	authDomain: 'instagram-fullstacksk.firebaseapp.com',
+	projectId: 'instagram-fullstacksk',
+	storageBucket: 'instagram-fullstacksk.appspot.com',
+	messagingSenderId: '971529165207',
+	appId: '1:971529165207:web:503d131dfbf4cc462b0cd2'
+};
+
+// Initialize Firebase
+if (firebase?.apps?.length === 0) firebase.initializeApp(firebaseConfig);
+const Stack = createStackNavigator();
+
+export class App extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {loaded:false, loggedIn:false}
+	}
+	componentDidMount() {
+		firebase.auth().onAuthStateChanged(user => {
+			if (!user)
+				this.setState({ loggedIn: false, loaded: true });
+			else
+				this.setState({loggedIn:true, loaded:true})
+		})
+	}
+	render() {
+		const { loggedIn, loaded } = this.state;
+		console.log(this.state);
+		if (!loaded) {
+			return (
+				<View style={styles.container}>
+					<Text>Loading...</Text>
+				</View>
+			);
+		}
+		
+		return (
+				<Provider store={store}>
+					<NavigationContainer>
+					<Stack.Navigator
+						initialRouteName={loggedIn ? "Main" : "Login"}
+						screenOptions={{
+							headerStyle: {
+								backgroundColor: '#b90e0e',
+							},
+							headerTintColor: '#fff',
+							headerTitleStyle: {
+								fontWeight: 'bold',
+							},
+						}}
+					>
+						<Stack.Screen
+							name="Home"
+							component={Main}
+							options={{ headerShown: true }}
+
+						/>
+							<Stack.Screen name="Register" component={Register}  />
+							<Stack.Screen name="Login" component={Login}  />
+						</Stack.Navigator>
+					</NavigationContainer>
+				</Provider>
 	);
+		
+		
+	}
 }
+export default App;
 
 const styles = StyleSheet.create({
 	container: {
