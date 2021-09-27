@@ -4,7 +4,7 @@ import { Camera } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const Add = () => {
+const Add = ({navigation}) => {
 	const [ hasPermission, setHasPermission ] = useState(null);
 	const [ hasGalleryPermission, setHasGalleryPermission ] = useState(null);
 	const [ type, setType ] = useState(Camera.Constants.Type.back);
@@ -62,6 +62,7 @@ const Add = () => {
 					title="Flip Camera"
 				/>
 				<Button onPress={() => takePicture()} title="Take Picture" />
+				{image && <Button onPress={() => navigation.navigate('Save',{image})} title="Save" />}
 				<Button onPress={() => pickImage()} title="Pick Image" />
 			</View>
 			<View style={styles.container}>{image && <Image source={{ uri: image }} style={{ flex: 1 }} />}</View>
