@@ -48,6 +48,6 @@ const styles = StyleSheet.create({
         borderRadius:100/2
     },
     logoutButton: {
-        margin:'24px'
+        margin:24
     }
 });

@@ -48,9 +48,11 @@ export class Register extends Component {
 				<View style={{ width: '80%' }}>
 					<Button onPress={() => this.onSignUp()} title="Sign Up" />
 				</View>
-				<View style={{ flex: 1, flexDirection: 'row', marginTop: '2rem' }}>
+				<View style={{ display: 'flex', flexDirection: 'row', marginTop: '2rem' }}>
 					<Text>Already have an account? </Text>
-					<TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>Sign In</TouchableOpacity>
+					<TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>
+						<Text>Sign In</Text>
+					</TouchableOpacity>
 				</View>
 			</View>
 		);
@@ -60,17 +62,15 @@ export class Register extends Component {
 export default Register;
 const styles = StyleSheet.create({
 	textInput: {
-		padding: '12px',
-		marginBottom: '16px',
+		padding: 12,
+		marginBottom: 16,
 		borderWidth: 2,
 		borderColor: 'blue',
 		borderRadius: 8,
 		width: '80%'
 	},
 	container: {
-		display: 'flex',
-		height: '100vh',
-		width: '100vw',
+		flex: 1,
 		backgroundColor: '#fff',
 		alignItems: 'center',
 		justifyContent: 'center'
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
 	titleText: {
 		fontSize: 24,
 		fontWeight: '800',
-		marginBottom: '24px',
+		marginBottom: 24,
 		color: 'purple'
 	}
 });

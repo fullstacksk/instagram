@@ -41,7 +41,7 @@ export class Login extends Component {
 				<View style={{ display: 'flex', flexDirection: 'row', marginTop: '2rem' }}>
 					<Text>Don't have an account? </Text>
 					<TouchableOpacity onPress={() => this.props.navigation.navigate('Register')}>
-						Sign Up
+						<Text>Sign Up</Text>
 					</TouchableOpacity>
 				</View>
 			</View>
@@ -52,17 +52,15 @@ export class Login extends Component {
 export default Login;
 const styles = StyleSheet.create({
 	textInput: {
-		padding: '12px',
-		marginBottom: '16px',
+		padding: 12,
+		marginBottom: 16,
 		borderWidth: 2,
 		borderColor: 'blue',
 		borderRadius: 8,
 		width: '80%'
 	},
 	container: {
-		display: 'flex',
-		height: '100vh',
-		width: '100vw',
+		flex: 1,
 		backgroundColor: '#fff',
 		alignItems: 'center',
 		justifyContent: 'center'
@@ -70,7 +68,7 @@ const styles = StyleSheet.create({
 	titleText: {
 		fontSize: 24,
 		fontWeight: '800',
-		marginBottom: '24px',
+		marginBottom: 24,
 		color: 'purple'
 	}
 });

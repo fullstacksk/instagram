@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import { fetchUser } from '../redux/actions';
 import Feeds from './main/Feeds';
 import Search from './main/Search';
-import Reels from './main/Reels';
+import Add from './main/Add';
 import Activity from './main/Activity';
 import Profile from './main/Profile';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -38,11 +38,11 @@ const Main = ({ fetchUser, currentUser }) => {
 				}}
 			/>
 			<Tab.Screen
-				name="Reels"
-				component={Reels}
+				name="Add"
+				component={Add}
 				options={{
 					tabBarIcon: ({ color, size }) => (
-						<MaterialCommunityIcons name="video-outline" color={color} size={26} />
+						<MaterialCommunityIcons name="camera-plus-outline" color={color} size={26} />
 					)
 				}}
 			/>
