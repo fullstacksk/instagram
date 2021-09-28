@@ -1,20 +1,24 @@
 import React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { FlatList, View, StyleSheet, Image } from 'react-native';
+import { connect } from 'react-redux';
+import Post from './Post';
 
-const Feeds = () => {
+const Feeds = ({ posts }) => {
+	console.log('All Posts : ', posts);
 	return (
 		<View style={styles.container}>
-			<Text>Feeds</Text>
+			<FlatList numColumns={1} horizontal={false} data={posts} renderItem={({ item }) => <Post post={item} />} />
 		</View>
 	);
 };
 
-export default Feeds;
+const mapStateToProps = (store) => ({
+	posts: store.userState.posts
+});
+export default connect(mapStateToProps)(Feeds);
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: '#fff',
-		alignItems: 'center',
-		justifyContent: 'center'
+		backgroundColor: '#fff'
 	}
 });
