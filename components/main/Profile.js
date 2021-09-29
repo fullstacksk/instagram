@@ -5,11 +5,12 @@ import icon from '../../assets/icon.png';
 import firebase from 'firebase';
 import 'firebase/firestore';
 
-const Profile = ({ currentUser, posts, navigation, route }) => {
+const Profile = ({ currentUser, posts,userFollowing, navigation, route,  }) => {
     const [user, setUser] = useState(null);
     const [userPosts, setUserPosts] = useState([]);
+    const [following, setFollowing] = useState(false)
     useEffect( () => {
-        
+        console.log('userFollowing : ', userFollowing);
         if (route.params.uid === firebase.auth().currentUser.uid) {
             setUser(currentUser);
             setUserPosts(posts);
@@ -45,8 +46,15 @@ const Profile = ({ currentUser, posts, navigation, route }) => {
                 console.log('Profile Comp : ', error)
                 }
             })();
+            //checking following or not
+            if (userFollowing.indexOf(route.params.uid) > -1) {
+                setFollowing(true);
+            } else {
+                setFollowing(false);
+            }
+            
         }
-    },[route.params.uid])
+    },[route.params.uid, userFollowing])
     const logout = async () => {
         try {
             await firebase.auth().signOut();
@@ -54,6 +62,22 @@ const Profile = ({ currentUser, posts, navigation, route }) => {
         } catch (error) {
             console.log("Log out error : ", error);
         }
+    }
+    const onFollow = () => {
+        firebase.firestore()
+            .collection('following')
+            .doc(firebase.auth().currentUser.uid)
+            .collection('userFollowing')
+            .doc(route.params.uid)
+            .set({})
+    }
+    const onUnfollow = () => {
+        firebase.firestore()
+            .collection('following')
+            .doc(firebase.auth().currentUser.uid)
+            .collection('userFollowing')
+            .doc(route.params.uid)
+            .delete()
     }
     if (user === null)
         return <View />
@@ -70,11 +94,17 @@ const Profile = ({ currentUser, posts, navigation, route }) => {
             <View style={styles.detail}>
 			<Text style={styles.text}>Name : {user?.name}</Text>
             <Text style={styles.text}>Email : {user?.email}</Text>
-               {route.params.uid === firebase.auth().currentUser.uid && <Button
+               {route.params.uid === firebase.auth().currentUser.uid ? <Button
                     title="Log Out"
                     onPress={logout}
                         color="purple"
-                />}
+                /> : (following? <Button
+                    title="Unfollow"
+                    onPress={onUnfollow}
+                />:<Button
+                    title="Follow"
+                    onPress={onFollow}
+                />)}
             </View>
             </View>
             {!userPosts.length && <Text style={styles.textCenter}>No Posts</Text>}
@@ -97,7 +127,8 @@ const Profile = ({ currentUser, posts, navigation, route }) => {
 
 const mapStateToProps = (store) => ({
     currentUser: store.userState.currentUser,
-    posts:store.userState.posts
+    posts:store.userState.posts,
+    userFollowing:store.userState.following
 });
 export default connect(mapStateToProps)(Profile);
 

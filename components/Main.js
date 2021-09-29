@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { fetchUser, fetchUserPosts } from '../redux/actions';
+import { fetchUser, fetchUserPosts, fetchUserFollowing } from '../redux/actions';
 import Feeds from './main/Feeds';
 import Search from './main/Search';
 import Add from './main/Add';
@@ -13,11 +13,11 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import firebase from 'firebase';
 
 const Tab = createMaterialBottomTabNavigator();
-const Main = ({ fetchUser, fetchUserPosts, currentUser, navigation }) => {
+const Main = ({ fetchUser, fetchUserPosts, fetchUserFollowing }) => {
 	useEffect(() => {
-		console.log('currentUser : ', currentUser);
 		fetchUser();
 		fetchUserPosts();
+		fetchUserFollowing();
 	}, []);
 	return (
 		<Tab.Navigator
@@ -78,6 +78,7 @@ const Main = ({ fetchUser, fetchUserPosts, currentUser, navigation }) => {
 const mapStateToProps = (store) => ({
 	currentUser: store.userState.currentUser
 });
-const mapDispatchToProps = (dispatch) => bindActionCreators({ fetchUser, fetchUserPosts }, dispatch);
+const mapDispatchToProps = (dispatch) =>
+	bindActionCreators({ fetchUser, fetchUserPosts, fetchUserFollowing }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);

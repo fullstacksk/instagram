@@ -1,9 +1,9 @@
 import firebase from 'firebase';
-import { USER_POSTS_STATE_CHANGE, USER_STATE_CHANGE } from '../constants';
+import { USER_FOLLOWING_STATE_CHANGE, USER_POSTS_STATE_CHANGE, USER_STATE_CHANGE } from '../constants';
 
+//Fetching User
 export const fetchUser = () => {
 	return async (dispatch) => {
-		// console.log('currentUser : ', firebase.auth().currentUser.uid);
 		try {
 			const snapshot = await firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid).get();
 			if (snapshot.exists) {
@@ -17,14 +17,14 @@ export const fetchUser = () => {
 		}
 	};
 };
+//Fetching user posts
 export const fetchUserPosts = () => {
 	return async (dispatch) => {
-		// console.log('currentUser : ', firebase.auth().currentUser.uid);
 		try {
 			const snapshot = await firebase
 				.firestore()
 				.collection('posts')
-				.doc(`${firebase.auth().currentUser.uid}`)
+				.doc(firebase.auth().currentUser.uid)
 				.collection('userPosts')
 				.orderBy('createdAt', 'desc')
 				.get();
@@ -39,6 +39,28 @@ export const fetchUserPosts = () => {
 			} else {
 				throw new Error('Post not found');
 			}
+		} catch (error) {
+			console.log(error);
+		}
+	};
+};
+
+//Fetching user following
+export const fetchUserFollowing = () => {
+	return (dispatch) => {
+		try {
+			firebase
+				.firestore()
+				.collection('following')
+				.doc(firebase.auth().currentUser.uid)
+				.collection('userFollowing')
+				.onSnapshot((snapshot) => {
+					const following = snapshot.docs.map((doc) => {
+						return doc.id;
+					});
+					console.log('following : ', following);
+					dispatch({ type: USER_FOLLOWING_STATE_CHANGE, following });
+				});
 		} catch (error) {
 			console.log(error);
 		}
