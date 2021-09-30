@@ -4,8 +4,17 @@ import {
 	USERS_POSTS_STATE_CHANGE,
 	USER_FOLLOWING_STATE_CHANGE,
 	USER_POSTS_STATE_CHANGE,
-	USER_STATE_CHANGE
+	USER_STATE_CHANGE,
+	CLEAR_DATA
 } from '../constants';
+
+//clear All Data
+
+export const clearData = () => {
+	return (dispatch) => {
+		dispatch({ type: CLEAR_DATA });
+	};
+};
 
 //Fetching User
 export const fetchUser = () => {
