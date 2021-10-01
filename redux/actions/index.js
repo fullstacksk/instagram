@@ -74,7 +74,7 @@ export const fetchUserFollowing = () => {
 					});
 					console.log('following : ', following);
 					dispatch({ type: USER_FOLLOWING_STATE_CHANGE, following });
-					following.forEach((user) => dispatch(fetchUsersData(user)));
+					following.forEach((user) => dispatch(fetchUsersData(user, true)));
 				});
 		} catch (error) {
 			console.log(error);
@@ -84,7 +84,7 @@ export const fetchUserFollowing = () => {
 
 //fetching users data
 
-export const fetchUsersData = (uid) => {
+export const fetchUsersData = (uid, getPosts) => {
 	return async (dispatch, getState) => {
 		const found = getState().usersState.users.some((el) => el.uid === uid);
 		if (!found) {
@@ -93,7 +93,9 @@ export const fetchUsersData = (uid) => {
 				let user = snapshot.data();
 				user.uid = snapshot.id;
 				await dispatch({ type: USERS_DATA_STATE_CHANGE, user });
-				await dispatch(fetchUserFollowingPosts(user.uid));
+				if (getPosts) {
+					await dispatch(fetchUserFollowingPosts(uid));
+				}
 			} else {
 				throw new Error('User not found');
 			}

@@ -14,6 +14,7 @@ import rootReducer from './redux/reducers';
 import thunk from 'redux-thunk';
 import Save from './components/main/Save';
 import Add from './components/main/Add';
+import Comment from './components/main/Comment';
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
@@ -109,6 +110,12 @@ export class App extends Component {
 							name="Save"
 							component={Save}
 							options={{ headerShown: false }}
+							navigation={this.props.navigation}
+						/>
+						<Stack.Screen
+							name="Comment"
+							component={Comment}
+							// options={{ headerShown: false }}
 							navigation={this.props.navigation}
 						/>
 						</Stack.Navigator>

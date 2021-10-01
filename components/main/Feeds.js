@@ -35,7 +35,7 @@ const Feeds = ({ users, usersLoaded, userFollowing, navigation, route }) => {
 					numColumns={1}
 					horizontal={false}
 					data={posts}
-					renderItem={({ item }) => <Post post={item} />}
+					renderItem={({ item }) => <Post navigation={navigation} post={item} />}
 				/>
 			</View>
 		</View>
@@ -67,6 +67,7 @@ const styles = StyleSheet.create({
 	},
 	textCenter: {
 		marginBottom: 8,
+		padding: 16,
 		fontWeight: '600',
 		textAlign: 'center'
 	},
