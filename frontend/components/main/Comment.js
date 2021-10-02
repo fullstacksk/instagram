@@ -8,7 +8,8 @@ import { fetchUsersData } from '../../redux/actions';
 const Comment = ({ route, users, fetchUsersData }) => {
 	const [ comments, setComments ] = useState([]);
 	const [ postId, setPostId ] = useState('');
-	const [ text, setText ] = useState('');
+	const [text, setText] = useState('');
+	const [submit, setSubmit] = useState(0);
 
 	useEffect(
 		() => {
@@ -26,7 +27,7 @@ const Comment = ({ route, users, fetchUsersData }) => {
 				});
 				setComments(comments);
 			}
-			if (route.params.postId !== postId) {
+			if (route.params.postId !== postId || submit>0) {
 				firebase
 					.firestore()
 					.collection('posts')
@@ -49,10 +50,11 @@ const Comment = ({ route, users, fetchUsersData }) => {
 			}
 			console.log('comments : ', comments);
 		},
-		[ route.params.postId, users ]
+		[ route.params.postId, users, submit ]
 	);
 	const onComment = () => {
-		firebase
+		setText('');
+		 firebase
 			.firestore()
 			.collection('posts')
 			.doc(route.params.uid)
@@ -62,7 +64,12 @@ const Comment = ({ route, users, fetchUsersData }) => {
 			.add({
 				creater: firebase.auth().currentUser.uid,
 				text
-			});
+			})
+			 .then(() => {
+				 console.log('i am called')
+			
+				  setSubmit(submit+1);
+		})
 	};
 	return (
 		<View style={styles.container}>
@@ -84,9 +91,9 @@ const Comment = ({ route, users, fetchUsersData }) => {
 				{comments.length === 0 && <Text style={styles.textCenter}>No comments Yet</Text>}
 			</View>
 			<View style={styles.doComment}>
-				<TextInput style={styles.textInput} placeholder="comment..." onChangeText={(text) => setText(text)} />
+				<TextInput style={styles.textInput} placeholder="comment..."  value={text} onChangeText={(text) => setText(text)} />
 
-				<TouchableOpacity style={styles.commentButton} onPress={onComment}>
+				<TouchableOpacity style={styles.commentButton} disabled={!text} onPress={onComment}>
 					Comment
 				</TouchableOpacity>
 			</View>

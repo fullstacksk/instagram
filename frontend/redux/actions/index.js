@@ -4,6 +4,7 @@ import {
 	USERS_POSTS_STATE_CHANGE,
 	USER_FOLLOWING_STATE_CHANGE,
 	USER_POSTS_STATE_CHANGE,
+	USERS_LIKES_STATE_CHANGE,
 	USER_STATE_CHANGE,
 	CLEAR_DATA
 } from '../constants';
@@ -124,10 +125,40 @@ export const fetchUserFollowingPosts = (uid) => {
 				});
 
 				console.log('fetchUserFollowingPosts : ', { user, posts });
+				posts.forEach((post) => {
+					dispatch(fetchUserFollowingLikes(uid, post.id));
+				});
 				dispatch({ type: USERS_POSTS_STATE_CHANGE, posts, uid });
 			} else {
 				throw new Error('Post not found');
 			}
+
+			console.log('getState : ', getState());
+		} catch (error) {
+			console.log(error);
+		}
+	};
+};
+//Fetching user following likes
+export const fetchUserFollowingLikes = (uid, postId) => {
+	return async (dispatch, getState) => {
+		try {
+			await firebase
+				.firestore()
+				.collection('posts')
+				.doc(uid)
+				.collection('userPosts')
+				.doc(postId)
+				.collection('likes')
+				.doc(firebase.auth().currentUser.uid)
+				.onSnapshot((snapshot) => {
+					const postId = snapshot.ref.path.split('/')[3];
+					let currentUserLike = false;
+					if (snapshot.exists) {
+						currentUserLike = true;
+					}
+					dispatch({ type: USERS_LIKES_STATE_CHANGE, postId, currentUserLike });
+				});
 
 			console.log('getState : ', getState());
 		} catch (error) {

@@ -35,6 +35,8 @@ const Save = (props) => {
 			.collection('userPosts')
 			.add({
 				downlaodURL,
+				likesCount: 0,
+				commentCount: 0,
 				caption,
 				createdAt: firebase.firestore.FieldValue.serverTimestamp()
 			})

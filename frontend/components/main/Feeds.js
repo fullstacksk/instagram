@@ -2,30 +2,60 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Image, Button, FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import Post from './Post';
+import firebase from 'firebase';
 import 'firebase/firestore';
 
-const Feeds = ({ users, usersLoaded, userFollowing, navigation, route }) => {
+const Feeds = ({ feeds, usersLoaded, userFollowing, navigation, route }) => {
 	const [ posts, setPosts ] = useState([]);
 
 	useEffect(
 		() => {
-			let posts = [];
+			// let posts = [];
 			if (usersLoaded === userFollowing.length) {
-				userFollowing.forEach((uid) => {
-					const user = users.find((el) => el.uid === uid);
-					if (user !== undefined) {
-						posts = [ ...posts, ...user.posts ];
-					}
+				// userFollowing.forEach((uid) => {
+				// 	const user = users.find((el) => el.uid === uid);
+				// 	if (user !== undefined) {
+				// 		posts = [ ...posts, ...user.posts ];
+				// 	}
+				// });
+				// posts.sort((x, y) => {
+				// 	return x.createdAt - y.createdAT;
+				// });
+				// setPosts(posts);
+				feeds.sort((x, y) => {
+					return x.createdAt - y.createdAT;
 				});
+				setPosts(feeds);
 			}
-			posts.sort((x, y) => {
-				return x.createdAt - y.createdAT;
-			});
-			setPosts(posts);
+			console.log('feeds', feeds);
 		},
-		[ usersLoaded ]
+		[ usersLoaded, feeds ]
 	);
 
+	const onLike = (uid, postId) => {
+		console.log('onLike : ', uid, postId);
+		firebase
+			.firestore()
+			.collection('posts')
+			.doc(uid)
+			.collection('userPosts')
+			.doc(postId)
+			.collection('likes')
+			.doc(firebase.auth().currentUser.uid)
+			.set({});
+	};
+	const onDislike = (uid, postId) => {
+		console.log('onDislike : ', uid, postId);
+		firebase
+			.firestore()
+			.collection('posts')
+			.doc(uid)
+			.collection('userPosts')
+			.doc(postId)
+			.collection('likes')
+			.doc(firebase.auth().currentUser.uid)
+			.delete();
+	};
 	// if (user === null) return <View />;
 	return (
 		<View style={styles.container}>
@@ -35,7 +65,9 @@ const Feeds = ({ users, usersLoaded, userFollowing, navigation, route }) => {
 					numColumns={1}
 					horizontal={false}
 					data={posts}
-					renderItem={({ item }) => <Post navigation={navigation} post={item} />}
+					renderItem={({ item }) => (
+						<Post navigation={navigation} post={item} onLike={onLike} onDislike={onDislike} />
+					)}
 				/>
 			</View>
 		</View>
@@ -45,7 +77,7 @@ const Feeds = ({ users, usersLoaded, userFollowing, navigation, route }) => {
 const mapStateToProps = (store) => ({
 	currentUser: store.userState.currentUser,
 	userFollowing: store.userState.following,
-	users: store.usersState.users,
+	feeds: store.usersState.feeds,
 	usersLoaded: store.usersState.usersLoaded
 });
 export default connect(mapStateToProps)(Feeds);
